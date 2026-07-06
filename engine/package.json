@@ -8,7 +8,8 @@
   "scripts": {
     "start": "node src/server.js",
     "instruct": "node src/cli.js",
-    "feeds": "node src/feeds-cli.js"
+    "feeds": "node src/feeds-cli.js",
+    "setup:airtable": "node src/setup-airtable.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.68.0",

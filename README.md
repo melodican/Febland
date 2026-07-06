@@ -27,7 +27,8 @@ The prospecting engine below is **Station 1** of that factory, already prototype
 |--------|-----------|--------|
 | [`dashboard/`](dashboard/) | Febland Central — the cockpit concept + an interactive clickable prototype | **Prototype built** |
 | [`sales-factory/`](sales-factory/) | Full factory architecture + the "Dexter Brain" intake templates to fill in | **Architecture + templates** |
-| [`engine/`](engine/) | Runnable core — the central AI orchestrator + sub-agents (Node.js + Claude SDK), writing to the Airtable brain | **Runnable (needs API key)** |
+| [`engine/`](engine/) | Runnable core — the central AI orchestrator + sub-agents + channel feeds (Node.js + Claude SDK) | **Runnable (needs API key)** |
+| [`airtable/`](airtable/) | The Febland Brain base — schema, one-command setup script, and seed data (38 prospects + guardrails) | **Ready to build** |
 | [`prospecting-engine/`](prospecting-engine/) | Station 1 — net-new UK trade prospect finder + a real 38-business sample, and n8n wiring | **Prototype built** |
 | [`outreach/`](outreach/) | Velvet-led, segmented multichannel sequences that replace the Tuesday blast | **Draft copy** |
 | [`strategy/`](strategy/) | The diagnosis and the trade-first growth plan | Living doc |

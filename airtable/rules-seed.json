@@ -1,0 +1,11 @@
+[
+  { "Key": "max_auto_discount_pct", "Value": "0", "Notes": "Max discount the AI may offer without a human. Dexter to set." },
+  { "Key": "max_auto_quote_gbp", "Value": "0", "Notes": "Max quote value the AI may issue without a human. Dexter to set." },
+  { "Key": "allow_auto_credit", "Value": "false", "Notes": "May the AI grant credit terms unaided? Recommend false — always escalate." },
+  { "Key": "standard_trade_discount_pct", "Value": "", "Notes": "Standard trade discount off RRP." },
+  { "Key": "overall_moq_gbp", "Value": "", "Notes": "Minimum order value to open/keep an account." },
+  { "Key": "carriage_paid_threshold_gbp", "Value": "", "Notes": "Order value above which delivery is free." },
+  { "Key": "first_order_terms", "Value": "proforma", "Notes": "e.g. proforma first order, 30 days on approved credit thereafter." },
+  { "Key": "velvet_lead_time", "Value": "", "Notes": "Lead time for custom velvet, made to order." },
+  { "Key": "velvet_min_qty", "Value": "", "Notes": "Minimum quantity for a bespoke velvet order." }
+]
