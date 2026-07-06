@@ -62,3 +62,5 @@ export const agents = {
 };
 
 export const agentNames = Object.keys(agents);
+// Look up an agent by its display name (as stored on a Job's Agent field).
+export const agentByName = Object.fromEntries(Object.values(agents).map((a) => [a.name, a]));

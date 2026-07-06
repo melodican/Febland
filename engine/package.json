@@ -15,6 +15,7 @@
     "@anthropic-ai/sdk": "^0.68.0",
     "airtable": "^0.12.2",
     "dotenv": "^16.4.5",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "node-cron": "^3.0.3"
   }
 }

@@ -23,6 +23,14 @@ export async function createJob(fields) {
   return { id: rec.id, fields: rec.fields };
 }
 
+export async function listJobs({ status } = {}) {
+  if (!base) return memory.Jobs.filter((j) => !status || j.fields.Status === status);
+  const records = await base('Jobs')
+    .select(status ? { filterByFormula: `{Status} = '${status}'` } : {})
+    .all();
+  return records.map((r) => ({ id: r.id, fields: r.fields }));
+}
+
 export async function updateJob(id, fields) {
   if (!base) {
     const rec = memory.Jobs.find((j) => j.id === id);
