@@ -7,7 +7,8 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "instruct": "node src/cli.js"
+    "instruct": "node src/cli.js",
+    "feeds": "node src/feeds-cli.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.68.0",

@@ -1,12 +1,13 @@
-import Airtable from 'airtable';
 import { config } from '../config.js';
 
 // The factory's memory. Tables mirror sales-factory/orchestrator-and-brain.md.
 // If Airtable isn't configured yet, these fall back to an in-memory store so the
-// engine still runs end-to-end for demos.
+// engine still runs end-to-end with zero dependencies. The `airtable` package is
+// imported lazily, only when a key is present — so in-memory mode needs no install.
 
 let base = null;
 if (config.airtable.key && config.airtable.baseId) {
+  const Airtable = (await import('airtable')).default;
   base = new Airtable({ apiKey: config.airtable.key }).base(config.airtable.baseId);
 }
 
@@ -50,6 +51,38 @@ export async function upsertAccounts(rows) {
     await base('Accounts').create(rows.slice(i, i + 10).map((fields) => ({ fields })));
   }
   return rows.length;
+}
+
+// ---- Orders (feeds → dashboard revenue tiles) ----
+
+async function existingOrderIds() {
+  if (!base) return new Set(memory.Orders.map((o) => o.fields['External ID']));
+  const records = await base('Orders').select({ fields: ['External ID'] }).all();
+  return new Set(records.map((r) => r.fields['External ID']).filter(Boolean));
+}
+
+// De-dupes on External ID so re-running a feed never double-counts revenue.
+export async function upsertOrders(normalizedOrders) {
+  const { toAirtable } = await import('../feeds/normalize.js');
+  const seen = await existingOrderIds();
+  const fresh = normalizedOrders.filter((o) => o.externalId && !seen.has(o.externalId));
+  if (!fresh.length) return 0;
+  const rows = fresh.map((o) => toAirtable(o));
+  if (!base) {
+    rows.forEach((fields) => memory.Orders.push({ id: `ord_${memory.Orders.length + 1}`, fields }));
+    return rows.length;
+  }
+  for (let i = 0; i < rows.length; i += 10) {
+    await base('Orders').create(rows.slice(i, i + 10).map((fields) => ({ fields })));
+  }
+  return rows.length;
+}
+
+export async function listOrders() {
+  const { fromAirtable } = await import('../feeds/normalize.js');
+  if (!base) return memory.Orders.map((o) => fromAirtable(o.fields));
+  const records = await base('Orders').select().all();
+  return records.map((r) => fromAirtable(r.fields));
 }
 
 export const usingRealAirtable = () => Boolean(base);

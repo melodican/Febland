@@ -1,4 +1,5 @@
-import 'dotenv/config';
+// Load .env if dotenv is installed; harmless if it isn't (shell env still works).
+try { await import('dotenv/config'); } catch { /* dotenv optional */ }
 
 function warnMissing(name, note) {
   const v = process.env[name];

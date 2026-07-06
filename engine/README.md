@@ -58,6 +58,31 @@ A Claude developer login — either **OAuth** (`ant auth login`, no key string) 
 **`ANTHROPIC_API_KEY`**. Both point at a Claude API account; OAuth just skips the key. Everything
 else runs on sensible defaults; add Airtable + the channel keys when you're ready to go live.
 
+## Channel feeds (the revenue tiles)
+Connectors in `src/feeds/` pull orders from each channel, normalise them to one shape, **de-dupe on
+order ID** (re-running never double-counts), and write to the Airtable `Orders` table. `/revenue`
+then serves today / month-to-date / by-channel — exactly what the dashboard's top strip shows.
+
+| Channel | Connector | Auth needed (see `.env.example`) |
+|---------|-----------|----------------------------------|
+| WooCommerce (trade) | `feeds/woocommerce.js` | Site URL + read-only REST key/secret |
+| Shopify (retail) | `feeds/shopify.js` | Shop domain + Admin API token |
+| Faire (wholesale) | `feeds/faire.js` | Brand access token |
+| Amazon | `feeds/amazon.js` | LWA client id/secret + refresh token + marketplace |
+| eBay | `feeds/ebay.js` | OAuth user access token |
+
+Each channel is **independent** — it's skipped until its credentials are present, so you can turn
+them on one at a time (Shopify or WooCommerce first is easiest).
+
+```bash
+npm run feeds            # pull today's orders from every configured channel + print a summary
+npm run feeds -- 7d      # last 7 days
+```
+Endpoints (for the dashboard / n8n): `GET /feeds/status`, `POST /feeds/pull`, `GET /revenue`.
+
+> Amazon/eBay/Faire order schemas evolve — those connectors are built to the current API shape with
+> the field mappings commented; verify a field or two against the live docs on first real pull.
+
 ## Map to the rest of the repo
 | This engine | Elsewhere |
 |-------------|-----------|
