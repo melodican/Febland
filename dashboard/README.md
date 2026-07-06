@@ -1,14 +1,19 @@
-# The Feblands Dashboard
+# Febland Central
 
 The cockpit — where Dexter walks in of a morning and sees **everything** in one look. It's not a
-separate product; it's the **face of the Sales Factory** (`../sales-factory/`):
+separate product; it's the **face of the Sales Factory** (`../sales-factory/`). Layout built to
+Dexter's own sketch:
 
 | Dashboard area | What it really is |
 |----------------|-------------------|
-| **Top — finances** | The commerce layer consolidated: Shopify, Amazon, eBay, Wayfair, WooCommerce (trade), Faire |
-| **Left — agent boards** | The 7 factory stations, live: what each agent is working on + the human-gate flags |
-| **Centre — the main agent** | The orchestrator brain. Dexter talks to it; it breaks instructions into jobs and hands them to the station agents |
-| **Right — live sales** | The orders layer: Sale · Product · Platform · Customer · Revenue · time |
+| **Top — revenue by channel** | One tile per channel: Trade Febland (WooCommerce), Febland (Shopify), Faire, Amazon, eBay |
+| **Left — Tasks** | The agents currently at work, as boards + the human-gate ("needs you") flags |
+| **Centre — the central AI** | The orchestrator. Dexter instructs it and it **spawns agents off itself**; their output renders in the workspace below the chat |
+| **Right — Completed** | The stack of jobs agents have finished today |
+
+The centre panel is the heart of it: a **central AI that spawns sub-agents**. In the prototype you
+can see the full loop — instruct it → an agent spins up under Tasks → its result renders in the
+workspace → the job lands in Completed.
 
 ## The interactive prototype
 `feblands-dashboard.html` is a working, clickable mockup (published as a Claude Artifact). It uses
