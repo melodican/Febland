@@ -1,32 +1,38 @@
 # 01 · Ideal Customer (ICP) & Red Lines
 
-_This tells the factory who to chase and who to walk away from. Fill in Dexter's actual view._
+> **AI-drafted v0.1 — for Dexter/Glen to correct.**
+> Legend: ✅ = draft, confirm or edit · ❓ = need your input (only you know this)
 
-## Who is a GREAT Febland trade customer?
-_(e.g. independent furniture retailer with a showroom, £X turnover, buys differentiated stock, reorders...)_
--
--
--
+## Who is a GREAT Febland trade customer? ✅ _(draft)_
+A UK home/interiors business that sells on **look and differentiation, not lowest price** — so
+Febland's custom velvet and statement ranges are an asset, not a margin problem. Ideally:
+- Has a showroom, active website, or live project pipeline (real buying, not browsing)
+- Buys *ranges* and **reorders**, rather than one-off bargains
+- Values a 70-year, family-run British supplier they can rely on
+- ❓ Minimum size/turnover worth pursuing: ________
 
-## Which of the five segments do we prioritise, in order?
-_(1 = chase hardest.) Independent retailers · interior designers · lifestyle/gift boutiques · hospitality FF&E · home stagers/holiday-let furnishers_
-1.
-2.
-3.
+## Segment priority (1 = chase hardest) ✅ _(draft — confirm order)_
+1. **Interior designers / studios** — spec & reorder, value bespoke velvet, higher margin
+2. **Hospitality / contract FF&E** — volume, statement velvet pieces for lobbies/bars
+3. **Independent furniture retailers** — resell ranges; velvet = stock rivals can't price-match
+4. **Lifestyle / gift boutiques** — accessories, mosaic lamps, velvet artwork, gift lines
+5. **Home stagers / holiday-let furnishers** — repeat bulk, want photogenic hero pieces
+> ❓ Does Dexter agree with this order? Any segment we should drop or add?
 
-## What makes a prospect HIGH value vs low value?
-_(order size, reorder likelihood, margin, strategic fit — especially for the velvet range)_
--
+## What makes a prospect HIGH value? ✅ _(draft)_
+Large/repeat order potential · reorders · takes the velvet range (margin + stickiness) · multi-site
+or multi-project buyer · advocates who refer. ❓ _Dexter to add the real markers he uses._
 
-## Geography
-_(UK-only? EU still viable post-Brexit? Preferred regions / delivery-friction limits?)_
--
+## Geography ❓
+- UK-only, or is EU still viable post-Brexit? ________
+- Preferred regions / max delivery distance? ________
 
-## RED LINES — who do we NOT sell to, or must escalate?
-_(competitors, bad-debt risks, tiny one-off orders, sectors we avoid, discount-only bargain hunters...)_
--
--
+## RED LINES — do NOT sell / must escalate ✅ _(draft — confirm & extend)_
+- Direct competitors / other wholesalers reselling against us
+- Known bad-debt or county-court-judgment risks (credit gate)
+- Discount-only bargain hunters with no reorder intent
+- ❓ Sectors or specific businesses Dexter refuses to supply: ________
 
-## Any existing accounts that are the "perfect customer" template?
-_(name a few — the factory learns the pattern from them)_
--
+## "Perfect customer" template accounts ❓
+Name 3–5 of your best existing trade accounts — the factory learns the pattern from them:
+1. ________  2. ________  3. ________
