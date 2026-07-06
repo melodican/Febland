@@ -29,7 +29,12 @@ engine's internal tick handles it.
 - Body: `{ "agent": "salesAgent", "goal": "A trade buyer replied: <paste>. Draft a response.", "requestedBy": "Event" }`
 - Agents: `prospector`, `qualifier`, `outreach`, `salesAgent`, `onboarder`, `merchandiser`.
 
-## 4 · (Optional) pull channel revenue on a schedule
+## 4 · Daily staff briefing → email / Slack / WhatsApp
+**Nodes:** `Schedule Trigger` (e.g. 07:30) → `HTTP Request` → `Send Email` / `Slack` / `WhatsApp`
+- `GET http://ENGINE_HOST:8080/briefing` returns a plain-text digest of what the AI did (jobs done,
+  needs-approval, revenue). Pipe it into whatever channel the team uses.
+
+## 5 · (Optional) pull channel revenue on a schedule
 **Nodes:** `Schedule Trigger` (e.g. every 15 min) → `HTTP Request`
 - `POST http://ENGINE_HOST:8080/feeds/pull`  → writes new orders to Airtable for the revenue tiles.
 

@@ -7,6 +7,7 @@ import { usingRealAirtable, listJobs } from './lib/airtable.js';
 import { pullAll } from './feeds/runner.js';
 import { revenueSummary } from './feeds/summary.js';
 import { connectors } from './feeds/index.js';
+import { buildBriefing } from './briefing.js';
 
 // Febland Central's engine. The board (Airtable Jobs) + central AI + worker + feeds.
 const app = express();
@@ -62,6 +63,11 @@ app.post('/work', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// Staff briefing — what the AI has been doing (n8n schedules this daily → email/Slack).
+app.get('/briefing', async (_req, res) => {
+  try { res.type('text/plain').send(await buildBriefing()); } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
 // ---- Feeds / revenue ----

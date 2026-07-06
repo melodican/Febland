@@ -25,6 +25,7 @@ The prospecting engine below is **Station 1** of that factory, already prototype
 ## What's here
 | Folder | What it is | Status |
 |--------|-----------|--------|
+| [`company-brain/`](company-brain/) | **The source of truth** — who the group is, all four businesses, policies, workflows, staff notify-map. Every agent reads this | **Structure + real facts, gaps to fill** |
 | [`dashboard/`](dashboard/) | Febland Central — the cockpit concept + an interactive clickable prototype | **Prototype built** |
 | [`sales-factory/`](sales-factory/) | Full factory architecture + the "Dexter Brain" intake templates to fill in | **Architecture + templates** |
 | [`engine/`](engine/) | Runnable core — the central AI orchestrator + sub-agents + channel feeds (Node.js + Claude SDK) | **Runnable (needs API key)** |

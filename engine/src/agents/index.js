@@ -1,5 +1,5 @@
 import { think } from '../lib/anthropic.js';
-import { loadBrain, guardrailText } from '../brain.js';
+import { loadBrain, guardrailText, loadGroupOverview } from '../brain.js';
 
 // Each sub-agent the central AI can spawn. They all share one shape:
 //   run(job) -> { summary, artifact, needsApproval, reason }
@@ -8,11 +8,17 @@ import { loadBrain, guardrailText } from '../brain.js';
 
 const brand = () => {
   const { docs } = loadBrain();
-  return `You are a sales agent for Febland — a family-run furniture, lighting, artwork and gifts
-company in Blackpool, trading since 1952. Your wedge is Febland's custom-printed velvet artwork and
-furniture, made in-house — differentiated stock no importer can undercut.
+  return `You work for the Febland Group — a family-run group in Blackpool. Its businesses: Febland
+(furniture/lighting/artwork/gifts, trade + retail, since 1952), Blackpool Upholstery (bespoke
+re-upholstery + custom velvet, contract/hospitality), Blackpool Storage (self-storage) and commercial
+Rentals. Febland's wedge is its in-house custom-printed velvet — differentiated stock no importer can
+match. Know the group so you can spot cross-sell (e.g. a hospitality lead can serve both Febland
+contract furniture and Blackpool Upholstery).
 
-Decide and write like Febland, using these rules:
+Group source of truth:
+${loadGroupOverview()}
+
+Decide and write like the Febland Group, using these rules:
 ${docs}
 
 ${guardrailText()}`;

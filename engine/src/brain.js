@@ -8,6 +8,12 @@ import { config } from './config.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const brainDir = join(here, '..', '..', 'sales-factory', 'brain');
+const groupPath = join(here, '..', '..', 'company-brain', '00-group.md');
+
+// The group-wide source of truth every agent should be aware of (all four businesses).
+export function loadGroupOverview() {
+  try { return readFileSync(groupPath, 'utf8'); } catch { return ''; }
+}
 
 export function loadBrain() {
   let docs = '';
