@@ -25,6 +25,7 @@ The prospecting engine below is **Station 1** of that factory, already prototype
 ## What's here
 | Folder | What it is | Status |
 |--------|-----------|--------|
+| [`dashboard/`](dashboard/) | The Feblands Dashboard — the cockpit concept + an interactive clickable prototype | **Prototype built** |
 | [`sales-factory/`](sales-factory/) | Full factory architecture + the "Dexter Brain" intake templates to fill in | **Architecture + templates** |
 | [`prospecting-engine/`](prospecting-engine/) | Station 1 — net-new UK trade prospect finder + a real 38-business sample, and n8n wiring | **Prototype built** |
 | [`strategy/`](strategy/) | The diagnosis and the trade-first growth plan | Living doc |

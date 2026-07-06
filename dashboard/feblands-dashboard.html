@@ -1,0 +1,536 @@
+<style>
+  /* ============ Febland Command — tokens ============ */
+  :root {
+    --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+    /* warm, plum-biased neutrals */
+    --ground: #F7F2F4;
+    --surface: #FFFFFF;
+    --surface-2: #FBF6F8;
+    --ink: #241A1F;
+    --ink-2: #6C5A63;
+    --ink-3: #9A8A91;
+    --border: #ECE1E6;
+    --border-2: #E1D2D9;
+
+    /* velvet accent */
+    --accent: #A23B67;
+    --accent-strong: #8A2F57;
+    --accent-soft: #F3E1E9;
+
+    /* semantic — separate from accent */
+    --good: #2E8B6F;
+    --warn: #B0741A;
+    --warn-bg: #F7EBD6;
+    --crit: #C24A44;
+
+    --shadow: 0 1px 2px rgba(40,20,30,.04), 0 6px 20px rgba(40,20,30,.05);
+    --radius: 14px;
+    --radius-s: 9px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #171114;
+      --surface: #201820;
+      --surface-2: #261C25;
+      --ink: #F3ECEF;
+      --ink-2: #B6A6AF;
+      --ink-3: #8A7982;
+      --border: #362732;
+      --border-2: #43313D;
+      --accent: #D678A0;
+      --accent-strong: #E58FB3;
+      --accent-soft: #3A2130;
+      --good: #56C7A2;
+      --warn: #E4AC55;
+      --warn-bg: #392C1C;
+      --crit: #E8817A;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.28);
+    }
+  }
+  :root[data-theme="light"] {
+    --ground:#F7F2F4;--surface:#FFFFFF;--surface-2:#FBF6F8;--ink:#241A1F;--ink-2:#6C5A63;--ink-3:#9A8A91;
+    --border:#ECE1E6;--border-2:#E1D2D9;--accent:#A23B67;--accent-strong:#8A2F57;--accent-soft:#F3E1E9;
+    --good:#2E8B6F;--warn:#B0741A;--warn-bg:#F7EBD6;--crit:#C24A44;--shadow:0 1px 2px rgba(40,20,30,.04),0 6px 20px rgba(40,20,30,.05);
+  }
+  :root[data-theme="dark"] {
+    --ground:#171114;--surface:#201820;--surface-2:#261C25;--ink:#F3ECEF;--ink-2:#B6A6AF;--ink-3:#8A7982;
+    --border:#362732;--border-2:#43313D;--accent:#D678A0;--accent-strong:#E58FB3;--accent-soft:#3A2130;
+    --good:#56C7A2;--warn:#E4AC55;--warn-bg:#392C1C;--crit:#E8817A;--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.28);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .app {
+    font-family: var(--font-ui);
+    background: var(--ground);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .tnum { font-variant-numeric: tabular-nums; }
+
+  /* ============ Top bar ============ */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+    padding: 4px 6px 2px;
+  }
+  .brand { display: flex; align-items: baseline; gap: 14px; }
+  .wordmark {
+    font-family: var(--font-serif);
+    font-size: 27px; font-weight: 600; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--ink);
+  }
+  .wordmark .dot { color: var(--accent); }
+  .tagline { font-size: 12.5px; color: var(--ink-3); letter-spacing: .04em; }
+  .greeting { display: flex; align-items: center; gap: 14px; }
+  .greeting .hi { font-size: 14px; color: var(--ink-2); }
+  .greeting .hi b { color: var(--ink); font-weight: 600; }
+  .live { display: inline-flex; align-items: center; gap: 7px; font-size: 11.5px;
+    color: var(--ink-2); text-transform: uppercase; letter-spacing: .08em; }
+  .live .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--good);
+    box-shadow: 0 0 0 0 var(--good); animation: pulse 2.4s infinite; }
+  @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(46,139,111,.5);} 70%{box-shadow:0 0 0 7px rgba(46,139,111,0);} 100%{box-shadow:0 0 0 0 rgba(46,139,111,0);} }
+  .toggle {
+    font-family: var(--font-ui); font-size: 12px; color: var(--ink-2);
+    background: var(--surface); border: 1px solid var(--border-2); border-radius: 999px;
+    padding: 7px 13px; cursor: pointer;
+  }
+  .toggle:hover { color: var(--ink); border-color: var(--accent); }
+  .toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ============ Finance strip ============ */
+  .finance { display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px; }
+  .tile {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 15px 16px; box-shadow: var(--shadow);
+    display: flex; flex-direction: column; gap: 8px; min-width: 0;
+  }
+  .tile .label { font-size: 11px; text-transform: uppercase; letter-spacing: .09em; color: var(--ink-3); }
+  .tile .big { font-family: var(--font-serif); font-size: 30px; line-height: 1; color: var(--ink); }
+  .tile .big .cur { font-size: 18px; color: var(--ink-2); margin-right: 1px; }
+  .delta { font-size: 12px; display: inline-flex; align-items: center; gap: 4px; }
+  .delta.up { color: var(--good); }
+  .delta.down { color: var(--crit); }
+  .t-rev { grid-column: span 3; }
+  .t-mtd { grid-column: span 3; }
+  .t-ord { grid-column: span 2; }
+  .t-aov { grid-column: span 2; }
+  .t-chan { grid-column: span 2; }
+
+  .spark { width: 100%; height: 40px; display: block; }
+  .progress { height: 7px; background: var(--border); border-radius: 999px; overflow: hidden; }
+  .progress > i { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+  .progress-meta { font-size: 11.5px; color: var(--ink-2); display: flex; justify-content: space-between; }
+
+  .chan-row { display: flex; align-items: center; gap: 8px; font-size: 11.5px; }
+  .chan-row .nm { width: 62px; color: var(--ink-2); flex: none; }
+  .chan-row .bar { flex: 1; height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; }
+  .chan-row .bar > i { display: block; height: 100%; background: var(--accent); opacity: .85; }
+  .chan-row .val { width: 52px; text-align: right; color: var(--ink); flex: none; }
+
+  /* ============ Main grid ============ */
+  .grid { display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,1.5fr) minmax(0,1.15fr); gap: 14px; align-items: start; }
+  .col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .panel-head { display: flex; align-items: center; justify-content: space-between; padding: 13px 15px 11px; border-bottom: 1px solid var(--border); }
+  .panel-head h2 { margin: 0; font-family: var(--font-serif); font-size: 15px; font-weight: 600; letter-spacing: .01em; }
+  .panel-head .count { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .07em; }
+
+  /* ============ Agent boards ============ */
+  .boards { gap: 10px; }
+  .board {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-s);
+    padding: 12px 13px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 9px;
+  }
+  .board-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .agent { display: flex; align-items: center; gap: 9px; min-width: 0; }
+  .agent .av { width: 26px; height: 26px; border-radius: 8px; flex: none; display: grid; place-items: center;
+    font-family: var(--font-serif); font-size: 13px; color: #fff; background: var(--accent-strong); }
+  .agent .nm { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+  .agent .role { font-size: 11px; color: var(--ink-3); }
+  .pill { font-size: 10.5px; padding: 3px 8px; border-radius: 999px; letter-spacing: .04em; white-space: nowrap; font-weight: 600; }
+  .pill.work { color: var(--accent); background: var(--accent-soft); }
+  .pill.appr { color: var(--warn); background: var(--warn-bg); }
+  .pill.idle { color: var(--ink-3); background: var(--border); }
+  .jobs { display: flex; flex-direction: column; gap: 5px; }
+  .job { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-2); }
+  .job .tick { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex: none; opacity: .7; }
+  .job.attn { color: var(--ink); }
+  .job.attn .tick { background: var(--warn); opacity: 1; }
+  .metric { font-size: 12px; color: var(--ink-3); border-top: 1px dashed var(--border-2); padding-top: 8px; }
+  .metric b { color: var(--ink); font-weight: 600; }
+
+  /* ============ Main agent hub ============ */
+  .hub { position: sticky; top: 18px; }
+  .hub .panel { display: flex; flex-direction: column; height: 100%; }
+  .chat { display: flex; flex-direction: column; gap: 13px; padding: 15px; overflow-y: auto; max-height: 460px; }
+  .msg { display: flex; gap: 10px; max-width: 92%; }
+  .msg .who { width: 28px; height: 28px; border-radius: 9px; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 700; }
+  .msg.bot .who { background: var(--accent-strong); color: #fff; font-family: var(--font-serif); }
+  .msg.me { align-self: flex-end; flex-direction: row-reverse; }
+  .msg.me .who { background: var(--ink); color: var(--ground); }
+  .bubble { font-size: 13px; line-height: 1.5; padding: 10px 13px; border-radius: 13px; }
+  .msg.bot .bubble { background: var(--surface-2); border: 1px solid var(--border); color: var(--ink); border-top-left-radius: 4px; }
+  .msg.me .bubble { background: var(--accent); color: #fff; border-top-right-radius: 4px; }
+  .msg.me .bubble a { color: #fff; }
+  .approve { display: flex; gap: 7px; margin-top: 9px; }
+  .approve button { font-family: var(--font-ui); font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; }
+  .approve .yes { background: var(--accent); color: #fff; }
+  .approve .yes:hover { background: var(--accent-strong); }
+  .approve .no { background: transparent; color: var(--ink-2); border-color: var(--border-2); }
+  .approve .no:hover { color: var(--ink); }
+  .approve button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .composer { border-top: 1px solid var(--border); padding: 12px; display: flex; gap: 9px; }
+  .composer input { flex: 1; font-family: var(--font-ui); font-size: 13px; color: var(--ink);
+    background: var(--surface-2); border: 1px solid var(--border-2); border-radius: 10px; padding: 11px 13px; }
+  .composer input::placeholder { color: var(--ink-3); }
+  .composer input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+  .composer button { font-family: var(--font-ui); font-size: 13px; font-weight: 600; color: #fff; background: var(--accent);
+    border: none; border-radius: 10px; padding: 0 16px; cursor: pointer; }
+  .composer button:hover { background: var(--accent-strong); }
+  .composer button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 12px; }
+  .chip { font-size: 11.5px; color: var(--accent); background: var(--accent-soft); border: 1px solid transparent; border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .chip:hover { border-color: var(--accent); }
+  .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ============ Sales feed ============ */
+  .sales { display: flex; flex-direction: column; }
+  .sale { display: grid; grid-template-columns: auto 1fr auto; gap: 3px 11px; padding: 11px 15px; border-bottom: 1px solid var(--border); align-items: center; }
+  .sale:last-child { border-bottom: none; }
+  .sale .idx { grid-row: span 2; font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); }
+  .sale .prod { font-size: 13px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sale .rev { grid-row: span 2; text-align: right; font-family: var(--font-serif); font-size: 16px; color: var(--ink); }
+  .sale .meta { grid-column: 2; font-size: 11.5px; color: var(--ink-3); display: flex; align-items: center; gap: 7px; }
+  .plat { font-size: 10px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--ink-2); background: var(--surface-2); border: 1px solid var(--border-2); border-radius: 5px; padding: 1px 6px; }
+  .sale.flash { animation: flashin .8s ease; }
+  @keyframes flashin { from { background: var(--accent-soft); } to { background: transparent; } }
+
+  .foot { text-align: center; font-size: 11px; color: var(--ink-3); padding: 2px 0 6px; }
+  .foot b { color: var(--ink-2); font-weight: 600; }
+
+  /* ============ Responsive ============ */
+  @media (max-width: 1080px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+    .hub { position: static; grid-column: span 2; order: -1; }
+    .t-rev,.t-mtd { grid-column: span 6; }
+    .t-ord,.t-aov,.t-chan { grid-column: span 4; }
+  }
+  @media (max-width: 720px) {
+    .grid { grid-template-columns: 1fr; }
+    .hub { grid-column: auto; }
+    .finance > .tile { grid-column: 1 / -1 !important; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .live .pulse, .sale.flash { animation: none; }
+  }
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <span class="wordmark">Febland<span class="dot">.</span></span>
+      <span class="tagline">Command &middot; the whole business, one look</span>
+    </div>
+    <div class="greeting">
+      <span class="hi">Good morning, <b>Dexter</b> &middot; <span id="today"></span></span>
+      <span class="live"><span class="pulse"></span> Live</span>
+      <button class="toggle" id="themeBtn" aria-label="Toggle light or dark theme">Theme</button>
+    </div>
+  </header>
+
+  <!-- ============ FINANCES ============ -->
+  <section class="finance" aria-label="Financial overview across all channels">
+    <div class="tile t-rev">
+      <span class="label">Revenue today &middot; all channels</span>
+      <span class="big tnum"><span class="cur">&pound;</span>8,420</span>
+      <svg class="spark" id="spark" viewBox="0 0 220 40" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <span class="delta up">&#9650; 18% vs yesterday</span>
+    </div>
+    <div class="tile t-mtd">
+      <span class="label">Month to date</span>
+      <span class="big tnum"><span class="cur">&pound;</span>214,600</span>
+      <div class="progress"><i style="width:76%"></i></div>
+      <div class="progress-meta"><span>76% of &pound;280k target</span><span class="delta up">on track</span></div>
+    </div>
+    <div class="tile t-ord">
+      <span class="label">Orders today</span>
+      <span class="big tnum" id="ordCount">37</span>
+      <span class="delta up">&#9650; 5 vs avg</span>
+    </div>
+    <div class="tile t-aov">
+      <span class="label">Avg order value</span>
+      <span class="big tnum"><span class="cur">&pound;</span>228</span>
+      <span class="delta up">&#9650; &pound;12</span>
+    </div>
+    <div class="tile t-chan">
+      <span class="label">By channel &middot; today</span>
+      <div class="chan-row"><span class="nm">Trade&nbsp;(Woo)</span><span class="bar"><i style="width:100%"></i></span><span class="val tnum">&pound;3,900</span></div>
+      <div class="chan-row"><span class="nm">Amazon</span><span class="bar"><i style="width:45%"></i></span><span class="val tnum">&pound;1,740</span></div>
+      <div class="chan-row"><span class="nm">Shopify</span><span class="bar"><i style="width:30%"></i></span><span class="val tnum">&pound;1,180</span></div>
+      <div class="chan-row"><span class="nm">eBay</span><span class="bar"><i style="width:21%"></i></span><span class="val tnum">&pound;820</span></div>
+      <div class="chan-row"><span class="nm">Wayfair</span><span class="bar"><i style="width:13%"></i></span><span class="val tnum">&pound;510</span></div>
+      <div class="chan-row"><span class="nm">Faire</span><span class="bar"><i style="width:7%"></i></span><span class="val tnum">&pound;270</span></div>
+    </div>
+  </section>
+
+  <!-- ============ THREE COLUMNS ============ -->
+  <div class="grid">
+
+    <!-- LEFT: agent boards -->
+    <aside class="col boards" aria-label="Agents at work">
+      <div class="panel-head" style="border:none;padding:2px 4px 0">
+        <h2>Agents at work</h2><span class="count" id="agentCount">6 active</span>
+      </div>
+
+      <div class="board">
+        <div class="board-top">
+          <div class="agent"><span class="av">P</span><span><span class="nm">Prospector</span><br><span class="role">Station 1 &middot; Source</span></span></div>
+          <span class="pill work">Working</span>
+        </div>
+        <div class="jobs">
+          <div class="job"><span class="tick"></span>Scanning designers &amp; boutique hotels, NW &amp; Yorkshire</div>
+          <div class="job"><span class="tick"></span>De-duping against 500 existing accounts</div>
+        </div>
+        <div class="metric"><b>12</b> new prospects found today</div>
+      </div>
+
+      <div class="board">
+        <div class="board-top">
+          <div class="agent"><span class="av">Q</span><span><span class="nm">Qualifier</span><br><span class="role">Station 2 &middot; Enrich &amp; score</span></span></div>
+          <span class="pill work">Working</span>
+        </div>
+        <div class="jobs">
+          <div class="job"><span class="tick"></span>Enriching contacts via Companies House</div>
+          <div class="job"><span class="tick"></span>Scoring velvet-fit by segment</div>
+        </div>
+        <div class="metric"><b>8</b> scored &middot; <b>3</b> high-fit ready to engage</div>
+      </div>
+
+      <div class="board">
+        <div class="board-top">
+          <div class="agent"><span class="av">O</span><span><span class="nm">Outreach</span><br><span class="role">Station 3 &middot; Engage</span></span></div>
+          <span class="pill work">Working</span>
+        </div>
+        <div class="jobs">
+          <div class="job"><span class="tick"></span>41 velvet-led sequences active (email + LinkedIn)</div>
+          <div class="job"><span class="tick"></span>Following up openers from Tuesday</div>
+        </div>
+        <div class="metric"><b>14</b> opens &middot; <b>2</b> replies today</div>
+      </div>
+
+      <div class="board">
+        <div class="board-top">
+          <div class="agent"><span class="av">S</span><span><span class="nm">Sales Agent</span><br><span class="role">Station 4 &middot; Converse</span></span></div>
+          <span class="pill appr">1 needs you</span>
+        </div>
+        <div class="jobs">
+          <div class="job"><span class="tick"></span>5 live conversations in progress</div>
+          <div class="job attn"><span class="tick"></span>Quote for Oraanj Interiors &mdash; 12% discount, needs sign-off</div>
+        </div>
+        <div class="metric">Booked <b>2</b> showroom calls for this week</div>
+      </div>
+
+      <div class="board">
+        <div class="board-top">
+          <div class="agent"><span class="av">N</span><span><span class="nm">Onboarder</span><br><span class="role">Station 5 &middot; Onboard</span></span></div>
+          <span class="pill appr">1 needs you</span>
+        </div>
+        <div class="jobs">
+          <div class="job"><span class="tick"></span>Setting up TL Home (Glasgow) trade account</div>
+          <div class="job attn"><span class="tick"></span>Credit terms for Cotswold Grey &mdash; needs approval</div>
+        </div>
+        <div class="metric"><b>2</b> new accounts in setup</div>
+      </div>
+
+      <div class="board">
+        <div class="board-top">
+          <div class="agent"><span class="av">M</span><span><span class="nm">Merchandiser</span><br><span class="role">Station 6 &middot; Sell</span></span></div>
+          <span class="pill idle">Idle</span>
+        </div>
+        <div class="jobs">
+          <div class="job"><span class="tick"></span>Sent 4 personalised velvet line sheets overnight</div>
+          <div class="job"><span class="tick"></span>Reorder nudges queued for 9 dormant accounts</div>
+        </div>
+        <div class="metric">Next run <b>12:00</b></div>
+      </div>
+    </aside>
+
+    <!-- CENTER: main agent -->
+    <section class="col hub" aria-label="Talk to the main agent">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Ask Dexter&rsquo;s Assistant</h2>
+          <span class="count">Main agent</span>
+        </div>
+        <div class="chat" id="chat">
+          <div class="msg bot">
+            <span class="who">F</span>
+            <div class="bubble">
+              Morning, Dexter. Overnight the line brought in <b>12 new prospects</b>, sent <b>41 sequences</b>,
+              and got <b>2 replies</b>. We&rsquo;re at <b>&pound;8,420</b> across 6 channels &mdash; 18% up on yesterday.
+              <br><br>Two things need your nod before I proceed:
+              <div class="approve">
+                <button class="yes" data-done="Approved &mdash; sending the Oraanj quote now.">Approve Oraanj quote</button>
+                <button class="no" data-done="Held. I&rsquo;ll flag it for Mark to review.">Hold</button>
+              </div>
+            </div>
+          </div>
+          <div class="msg bot">
+            <span class="who">F</span>
+            <div class="bubble">
+              Cotswold Grey wants 45-day credit terms on their first order. That&rsquo;s above the auto-approve limit,
+              so it&rsquo;s yours to call.
+              <div class="approve">
+                <button class="yes" data-done="Approved &mdash; onboarding Cotswold Grey on 45-day terms.">Approve credit</button>
+                <button class="no" data-done="Proforma it is &mdash; I&rsquo;ll offer first-order proforma instead.">Proforma first</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="chips" id="chips">
+          <button class="chip">Find 20 more boutique hotels</button>
+          <button class="chip">Push the velvet range harder this week</button>
+          <button class="chip">Which accounts have gone quiet?</button>
+          <button class="chip">Draft Tuesday&rsquo;s email</button>
+        </div>
+        <form class="composer" id="composer">
+          <input id="msgInput" type="text" placeholder="Tell the assistant what to do&hellip;" autocomplete="off" aria-label="Message the main agent">
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- RIGHT: sales feed -->
+    <aside class="col" aria-label="Live sales across all channels">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Live sales</h2><span class="count" id="saleCount">37 today</span>
+        </div>
+        <div class="sales" id="sales">
+          <div class="sale"><span class="idx">37</span><span class="prod">Custom Velvet Wall Art &mdash; &lsquo;Coastal&rsquo;</span><span class="rev tnum">&pound;340</span><span class="meta"><span class="plat">Woo Trade</span> Websters Furniture &middot; 08:52</span></div>
+          <div class="sale"><span class="idx">36</span><span class="prod">Mosaic Table Lamp &mdash; Amber</span><span class="rev tnum">&pound;68</span><span class="meta"><span class="plat">Amazon</span> R. Patel &middot; 08:41</span></div>
+          <div class="sale"><span class="idx">35</span><span class="prod">Mirrored Console Table</span><span class="rev tnum">&pound;415</span><span class="meta"><span class="plat">Shopify</span> H. Okafor &middot; 08:33</span></div>
+          <div class="sale"><span class="idx">34</span><span class="prod">Velvet Accent Chair &mdash; Plum</span><span class="rev tnum">&pound;249</span><span class="meta"><span class="plat">Woo Trade</span> Basus, Glasgow &middot; 08:20</span></div>
+          <div class="sale"><span class="idx">33</span><span class="prod">Chrome &amp; Marble Bar Stool &times;4</span><span class="rev tnum">&pound;520</span><span class="meta"><span class="plat">Wayfair</span> The Oak Rooms &middot; 08:07</span></div>
+          <div class="sale"><span class="idx">32</span><span class="prod">Art Deco Wall Mirror</span><span class="rev tnum">&pound;132</span><span class="meta"><span class="plat">eBay</span> L. Bianchi &middot; 07:58</span></div>
+          <div class="sale"><span class="idx">31</span><span class="prod">Velvet Ottoman &mdash; Emerald</span><span class="rev tnum">&pound;185</span><span class="meta"><span class="plat">Faire</span> Harbour Lane &middot; 07:44</span></div>
+          <div class="sale"><span class="idx">30</span><span class="prod">Ceramic Table Lamp Pair</span><span class="rev tnum">&pound;96</span><span class="meta"><span class="plat">Shopify</span> S. Wright &middot; 07:31</span></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <p class="foot"><b>Prototype</b> &middot; sample data &mdash; a look at where the Febland Sales Factory is heading. Financial tiles will pull live from Shopify, Amazon, eBay, Wayfair, WooCommerce &amp; Faire.</p>
+</div>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+
+    // Theme toggle
+    document.getElementById('themeBtn').addEventListener('click', function () {
+      var cur = root.getAttribute('data-theme');
+      if (!cur) { cur = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+      root.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+    });
+
+    // Date
+    try {
+      document.getElementById('today').textContent =
+        new Date().toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'long' });
+    } catch (e) { document.getElementById('today').textContent = 'Today'; }
+
+    // Sparkline — single-hue velvet, area + line + emphasised endpoint
+    var data = [5.2,6.0,5.7,6.9,6.3,7.7,6.8,8.0,7.4,9.1,8.3,9.6,8.1,8.42];
+    var W = 220, H = 40, pad = 3;
+    var min = Math.min.apply(null, data), max = Math.max.apply(null, data);
+    var pts = data.map(function (v, i) {
+      var x = pad + i * (W - 2*pad) / (data.length - 1);
+      var y = H - pad - (v - min) / (max - min) * (H - 2*pad);
+      return [x, y];
+    });
+    var line = pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ');
+    var area = line + ' L' + pts[pts.length-1][0].toFixed(1) + ' ' + H + ' L' + pts[0][0].toFixed(1) + ' ' + H + ' Z';
+    var last = pts[pts.length - 1];
+    document.getElementById('spark').innerHTML =
+      '<path d="' + area + '" fill="var(--accent)" opacity="0.12"/>' +
+      '<path d="' + line + '" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<circle cx="' + last[0].toFixed(1) + '" cy="' + last[1].toFixed(1) + '" r="3" fill="var(--accent)"/>';
+
+    // Chat
+    var chat = document.getElementById('chat');
+    function bubble(kind, html) {
+      var wrap = document.createElement('div');
+      wrap.className = 'msg ' + kind;
+      wrap.innerHTML = '<span class="who">' + (kind === 'bot' ? 'F' : 'D') + '</span><div class="bubble">' + html + '</div>';
+      chat.appendChild(wrap);
+      chat.scrollTop = chat.scrollHeight;
+      return wrap;
+    }
+    var replies = {
+      'find 20 more boutique hotels': 'On it. I&rsquo;ve told the <b>Prospector</b> to source 20 boutique hotels running refurb projects, prioritising ones that&rsquo;d suit statement velvet. They&rsquo;ll be scored and in your feed within the hour.',
+      'push the velvet range harder this week': 'Done. <b>Outreach</b> and <b>Merchandiser</b> will lead every touch with the custom velvet this week, and I&rsquo;ll swap the hero on Tuesday&rsquo;s email to the &lsquo;Coastal&rsquo; artwork that&rsquo;s selling.',
+      'which accounts have gone quiet?': '9 accounts haven&rsquo;t ordered in 60+ days &mdash; including two former regulars. <b>Merchandiser</b> has win-back nudges queued with a velvet new-arrivals line sheet. Want me to send them now?',
+      'draft tuesday&rsquo;s email': 'Drafting now &mdash; velvet-led, segmented by buyer type. I&rsquo;ll drop it in your approvals before it goes anywhere near the list.'
+    };
+    function respond(text) {
+      var key = text.trim().toLowerCase();
+      var msg = replies[key] || ('Understood &mdash; I&rsquo;ll break that into jobs and hand them to the right agents. You&rsquo;ll see the work appear on the boards on the left, and I&rsquo;ll bring anything risky back to you first.');
+      setTimeout(function () { bubble('bot', msg); }, 420);
+    }
+    document.getElementById('composer').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var input = document.getElementById('msgInput');
+      var v = input.value.trim();
+      if (!v) return;
+      bubble('me', v.replace(/</g, '&lt;'));
+      input.value = '';
+      respond(v);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.chip'), function (c) {
+      c.addEventListener('click', function () {
+        bubble('me', c.textContent);
+        respond(c.textContent);
+      });
+    });
+    chat.addEventListener('click', function (e) {
+      var btn = e.target.closest('.approve button');
+      if (!btn) return;
+      var done = btn.getAttribute('data-done');
+      var box = btn.closest('.approve');
+      box.innerHTML = '<span style="font-size:12px;color:var(--good)">&#10003; ' + done + '</span>';
+    });
+
+    // Gentle live sale insertion (respects reduced motion)
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var pool = [
+        ['Custom Velvet Headboard &mdash; King', '&pound;295', 'Woo Trade', 'Jessica Lightbody'],
+        ['Mosaic Floor Lamp', '&pound;118', 'Amazon', 'K. Shah'],
+        ['Velvet Artwork &mdash; &lsquo;Botanica&rsquo;', '&pound;360', 'Faire', 'Chantillie House'],
+        ['Smoked Glass Side Table', '&pound;89', 'eBay', 'M. Turner'],
+        ['Rattan Accent Chair', '&pound;164', 'Shopify', 'A. Greene']
+      ];
+      var n = 38, salesEl = document.getElementById('sales'), k = 0;
+      setInterval(function () {
+        if (k >= pool.length) return;
+        var s = pool[k++]; n++;
+        var el = document.createElement('div');
+        el.className = 'sale flash';
+        var t = new Date().toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+        el.innerHTML = '<span class="idx">' + n + '</span><span class="prod">' + s[0] + '</span>' +
+          '<span class="rev tnum">' + s[1] + '</span><span class="meta"><span class="plat">' + s[2] + '</span> ' + s[3] + ' &middot; ' + t + '</span>';
+        salesEl.insertBefore(el, salesEl.firstChild);
+        document.getElementById('saleCount').textContent = n + ' today';
+      }, 9000);
+    }
+  })();
+</script>
