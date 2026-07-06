@@ -20,16 +20,32 @@ POST /instruct ──▶ Orchestrator (central AI) ──▶ plans jobs ──�
 - **Airtable optional** — with no key it uses an in-memory store so you can run it end-to-end today;
   add the key and it writes real `Jobs`/`Accounts`.
 
+## Authenticating Claude — two ways (no key string required)
+The engine's `new Anthropic()` client resolves credentials automatically. Pick one:
+
+**A) OAuth login (no key to paste) — easiest for testing on your own machine**
+```bash
+ant auth login      # opens a browser; log in with your Claude developer account
+ant auth status     # confirms which credential is active
+```
+The SDK reads the stored OAuth profile — leave `ANTHROPIC_API_KEY` unset. Note: this logs into a
+Claude **developer** account (API access/billing), not a personal Claude Pro/Max or ChatGPT
+subscription — those aren't licensed to power a backend and will rate-limit.
+
+**B) API key — the durable choice for the always-on production engine**
+Put `ANTHROPIC_API_KEY=...` in `.env`. Right for a server/n8n deployment where interactive OAuth
+login isn't practical.
+
 ## Run it
 ```bash
 cd engine
 npm install
-cp .env.example .env      # add ANTHROPIC_API_KEY (Airtable optional to start)
+cp .env.example .env      # optional: add ANTHROPIC_API_KEY, or use OAuth (above) and leave it blank
 npm start                 # server on :8080
 # or, one-shot from the terminal:
 npm run instruct -- "Draft Tuesday's velvet-led trade email"
 ```
-Check it's alive: `curl localhost:8080/health`
+Check it's alive: `curl localhost:8080/health` (shows whether it's using a key or an OAuth profile).
 
 Send an instruction:
 ```bash
@@ -38,8 +54,9 @@ curl -s localhost:8080/instruct -H 'content-type: application/json' \
 ```
 
 ## The only thing it needs from you
-An **`ANTHROPIC_API_KEY`** (console.anthropic.com) to switch the AI on. Everything else runs on
-sensible defaults; add Airtable + the channel keys when you're ready to make it live and persistent.
+A Claude developer login — either **OAuth** (`ant auth login`, no key string) or an
+**`ANTHROPIC_API_KEY`**. Both point at a Claude API account; OAuth just skips the key. Everything
+else runs on sensible defaults; add Airtable + the channel keys when you're ready to go live.
 
 ## Map to the rest of the repo
 | This engine | Elsewhere |
